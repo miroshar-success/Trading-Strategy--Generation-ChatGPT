@@ -7,8 +7,8 @@
         "start": "node src/main.js"
     },
     "dependencies": {
+        "@fugle/trade": "^2.1.1",
         "axios": "^1.4.0",
-        "openai": "^3.2.0",
-        "@fugle/trade": "^0.4.0"
+        "openai": "^3.2.0"
     }
 }
