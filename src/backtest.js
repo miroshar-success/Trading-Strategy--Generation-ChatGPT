@@ -1,27 +1,33 @@
-const { Backtest, Strategy } = require('fugle-backtest-node');
+const FugleTrade = require('@fugle/trade');
 
-async function backtestStrategy(strategy, data) {
+async function backtest(strategy, data) {
   try {
-    const myStrategy = new Strategy({
-      entryRule: (index) => {
-        return eval(strategy.buyCondition);
-      },
-      exitRule: (index) => {
-        return eval(strategy.sellCondition);
-      },
+    // Simulate strategy execution on historical data
+    let profit = 0;
+    let position = null;  // 'buy' or 'sell'
+
+    data.forEach((point, index) => {
+      const { time, close } = point;
+
+      // Evaluate buy/sell conditions
+      const buyCondition = eval(strategy.buyCondition.replace(/index/g, index));
+      const sellCondition = eval(strategy.sellCondition.replace(/index/g, index));
+
+      if (buyCondition && !position) {
+        position = 'buy';
+        console.log(`Buying at time ${time} with price ${close}`);
+      } else if (sellCondition && position === 'buy') {
+        profit += close - data[position].close;  // Calculate profit
+        position = null;  // Close position
+        console.log(`Selling at time ${time} with price ${close}`);
+      }
     });
 
-    const backtest = new Backtest({
-      data: data,
-      strategy: myStrategy,
-    });
-
-    const result = await backtest.run();
-    return result;
+    return { totalProfit: profit };
   } catch (error) {
     console.error('Error during backtesting:', error);
     return null;
   }
 }
 
-module.exports = backtestStrategy;
+module.exports = backtest;

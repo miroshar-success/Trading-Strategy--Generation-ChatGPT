@@ -4,11 +4,11 @@
     "description": "A bot that generates trading strategies using GPT, backtests them, and optimizes successful strategies.",
     "main": "src/main.js",
     "scripts": {
-      "start": "node src/main.js"
+        "start": "node src/main.js"
     },
     "dependencies": {
-      "axios": "^1.4.0",
-      "openai": "^3.2.0"
+        "axios": "^1.4.0",
+        "openai": "^3.2.0",
+        "@fugle/trade": "^0.4.0"
     }
-  }
-  
+}

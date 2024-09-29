@@ -1,6 +1,6 @@
 const fetchHistoricalData = require('./fetch-data');
 const generateStrategy = require('./strategy-gen');
-const backtestStrategy = require('./backtest');
+const backtest = require('./backtest');
 const optimizeStrategy = require('./optimize');
 const fs = require('fs');
 const path = require('path');
@@ -16,15 +16,15 @@ async function main() {
   
   // Retry until a good strategy is found
   while (!successfulStrategy) {
-    // Generate a trading strategy using AI (e.g., ChatGPT)
-    strategy = await generateStrategy();
+    // Generate a trading strategy using the historical data
+    strategy = await generateStrategy(data);
     if (!strategy) {
       console.log('Failed to generate a strategy. Retrying...');
       continue;  // Retry generating a strategy
     }
 
     // Backtest the generated strategy on historical data
-    result = await backtestStrategy(strategy, data);
+    result = await backtest(strategy, data);
     if (!result) {
       console.log('Backtest failed. Retrying with a new strategy...');
       continue;  // Retry generating a new strategy if backtest fails
